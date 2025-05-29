@@ -1,0 +1,52 @@
+Okay, "yaar"! Here's a standard .gitignore file that's suitable for most Node.js projects, including yours in Devrukh:
+
+# General Node.js
+node_modules
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.env
+
+# Logs and temporary files
+logs
+*.log
+*.tmp
+temp
+tmp
+
+# Editor and IDE specific files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp       # Vim swap files
+*.swo       # Vim swap files
+*.asv       # Autosave files (various editors)
+Emacs.d/    # Emacs directory
+
+# Build output
+build
+dist
+
+# Dependency caches
+npm-cache
+yarn-cache
+pnpm-store
+
+# Optional: Ignore debug output
+debug.log
+
+# Optional: Ignore system files (usually hidden)
+.DS_Store      # macOS
+Thumbs.db     # Windows
+
+# Optional: Ignore coverage reports
+coverage
+
+# Optional: Ignore bundled dependencies (if you have any)
+bundle/
+
+# Optional: Ignore any files you specifically don't want to track
+# my-secret-file.txt
