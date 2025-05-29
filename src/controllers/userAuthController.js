@@ -1,7 +1,7 @@
 // src/controllers/userAuthController.js
 
 const { User , Cart } = require('../models');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 async function signupUser(req, res) {
