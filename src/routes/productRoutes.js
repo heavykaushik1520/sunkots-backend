@@ -15,7 +15,7 @@ const {
 // Public routes
 router.get('/products', getAllProducts);
 router.get('/products/:id', getProductById);
-// router.get('/products/search', searchProductsByName);
+router.get('/products/search', searchProductsByName);
 
 // Admin-only routes
 router.post('/products', isAdmin, createProduct);

@@ -11,13 +11,20 @@ require('dotenv').config();
 const { sequelize, testConnection } = require('./config/db'); 
 
 //models
-const Admin = require('./models/admin'); 
-const Category = require('./models/category'); 
-const Product = require('./models/product'); 
-const User = require("./models/user"); 
-const Contact = require("./models/contact"); 
+// const Admin = require('./models/admin'); 
+// const Category = require('./models/category'); 
+// const Product = require('./models/product'); 
+// const User = require("./models/user"); 
+// const Contact = require("./models/contact"); 
+// const Banner = require("./models/banner");
+// const Order = require("./models/order");
+// const OrderItems = require("./models/orderItem");
+// const Cart = require("./models/cart");
+// const CartItem = require("./models/cartItem");
+// const ProductImage = require("./models/productImage");
 
 
+const models = require('./models'); 
 
 //routes
 const authRoutes = require('./routes/authRoutes');
@@ -28,6 +35,13 @@ const userAuthRoutes = require('./routes/userAuthRoutes');
 const userRoutes = require('./routes/userRoutes');
 const contactRoutes = require('./routes/contactRoutes'); 
 const cartRoutes = require('./routes/cartRoutes'); 
+const orderRoutes = require("./routes/orderRoutes"); 
+const paymentRoutes = require("./routes/paymentRoutes");
+const bannerRoutes = require("./routes/bannerRoutes");
+const adminOrderRoutes = require('./routes/adminOrderRoutes');
+const shipRoutes = require("./routes/shipRoutes");//created on 12/06
+
+
 
 
 
@@ -43,6 +57,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const allowedOrigins = [
   'http://localhost:5173',
+  'http://localhost:5174',
   'https://artiststation.co.in'
 ];
 
@@ -64,7 +79,7 @@ testConnection();
 
 async function syncDatabase() {
   try {
-    await sequelize.sync();
+    await sequelize.sync({ alter: true });
     console.log('Database synchronized successfully.');
   } catch (error) {
     console.error('Error synchronizing database:', error);
@@ -96,6 +111,22 @@ app.use('/api', contactRoutes);
 
 // Use your cart routes
 app.use('/api', cartRoutes);
+
+//order route
+app.use('/api', orderRoutes );
+
+//payment route
+app.use("/api/payment", paymentRoutes);
+
+//banner routes
+app.use('/api', bannerRoutes);
+
+//admin order routes
+app.use('/api/admin', adminOrderRoutes);
+
+//created on 12-06
+app.use('/api/webhooks',shipRoutes)
+
 
 
 

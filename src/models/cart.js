@@ -1,44 +1,23 @@
-// src/models/cart.js
-
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 
 const Cart = sequelize.define('Cart', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    unique: true, 
-  },
-  // No direct product or quantity here; managed by CartItem
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  userId: { type: DataTypes.INTEGER, allowNull: false, unique: true },
 }, {
   tableName: 'cart',
-  timestamps: true, 
+  timestamps: true,
 });
 
-Cart.associate = ({ User, Product, CartItem }) => {
-  Cart.belongsTo(User, {
-    foreignKey: 'userId',
-    as: 'user',
-  });
-
-  Cart.belongsToMany(Product, {
-    through: CartItem,
+Cart.associate = (models) => {
+  Cart.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+  Cart.belongsToMany(models.Product, {
+    through: models.CartItem,
     as: 'products',
     foreignKey: 'cartId',
     otherKey: 'productId',
   });
-
-  Cart.hasMany(CartItem, {
-    foreignKey: 'cartId',
-    as: 'cartItems',
-  });
+  Cart.hasMany(models.CartItem, { foreignKey: 'cartId', as: 'cartItems' });
 };
-
-
 
 module.exports = Cart;

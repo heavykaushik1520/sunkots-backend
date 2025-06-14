@@ -1,45 +1,52 @@
 // src/controllers/productController.js
 
-const { Product, Category } = require("../models"); // Import from index.js
+const { Product, Category, ProductImage } = require("../models"); // Import from index.js
 const { Sequelize } = require("sequelize");
 
 async function createProduct(req, res) {
   try {
-    const newProduct = await Product.create(req.body);
-    res.status(201).json(newProduct);
+    const { images, ...productData } = req.body; // images = array of image URLs
+
+    // Create product
+    const newProduct = await Product.create(productData);
+
+    // If images array exists and is an array
+    if (Array.isArray(images) && images.length > 0) {
+      const imageRecords = images.map((url) => ({
+        imageUrl: url,
+        productId: newProduct.id,
+      }));
+
+      // Bulk create ProductImage records
+      await ProductImage.bulkCreate(imageRecords);
+    }
+
+    // Fetch product with images and category included
+    const productWithImages = await Product.findByPk(newProduct.id, {
+      include: [
+        { model: Category, as: "category" },
+        { model: ProductImage, as: "images" },
+      ],
+    });
+
+    res.status(201).json(productWithImages);
   } catch (error) {
     console.error("Error creating product:", error);
-    res
-      .status(500)
-      .json({ message: "Failed to create product", error: error.message });
+    res.status(500).json({ message: "Failed to create product", error: error.message });
   }
 }
-
-// async function getAllProducts(req, res) {
-//   try {
-//     const products = await Product.findAll({
-//       include: {
-//         model: Category,
-//         as: "category",
-//       },
-//     });
-//     res.status(200).json(products);
-//   } catch (error) {
-//     console.error("Error fetching all products:", error);
-//     res
-//       .status(500)
-//       .json({ message: "Failed to fetch products", error: error.message });
-//   }
-// }
 
 async function getProductById(req, res) {
   const { id } = req.params;
   try {
     const product = await Product.findByPk(id, {
-      include: {
-        model: Category,
-        as: "category",
-      },
+      include: [
+        {
+          model: Category,
+          as: "category",
+        },
+        { model: ProductImage, as: "images" },
+      ],
     });
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -128,20 +135,19 @@ async function searchProductsByName(req, res) {
   }
 }
 
-
 //pagination
 async function getAllProducts(req, res) {
-  const { page = 1, limit = 5 } = req.query;
+  const { page = 1, limit = 6 } = req.query;
   const offset = (page - 1) * limit;
 
   try {
     const { count, rows: products } = await Product.findAndCountAll({
       limit: parseInt(limit),
       offset: offset,
-      include: {
-        model: Category,
-        as: "category",
-      },
+      include: [
+        { model: Category, as: "category" },
+        { model: ProductImage, as: "images" },
+      ],
     });
 
     res.status(200).json({

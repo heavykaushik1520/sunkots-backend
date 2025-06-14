@@ -25,6 +25,8 @@
 // module.exports = { isAdmin };
 
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
 
 function isAdmin(req, res, next) {
   const authHeader = req.header('Authorization');

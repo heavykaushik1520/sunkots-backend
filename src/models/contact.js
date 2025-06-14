@@ -21,13 +21,13 @@ const Contact = sequelize.define('Contact', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    validate: {
-      isEmail: true,
-    },
-  },
+  // email: {
+  //   type: DataTypes.STRING,
+  //   allowNull: true,
+  //   validate: {
+  //     isEmail: true,
+  //   },
+  // },
   message: {
     type: DataTypes.TEXT,
     allowNull: false,

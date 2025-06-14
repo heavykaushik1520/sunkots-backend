@@ -13,6 +13,6 @@ const {
 // Routes for the logged-in user's cart
 router.get('/cart', isUser, getMyCart);        
 router.post('/cart', isUser, updateMyCart);    
-// router.delete('/cart/:productId', isUser, deleteCartItem); 
+router.delete('/cart/:productId', isUser, deleteCartItem); 
 router.delete('/cart', isUser, clearMyCart);    
 module.exports = router;
